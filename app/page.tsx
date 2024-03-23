@@ -10,42 +10,35 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 import { lineaTestnet } from "viem/chains";
-import contract from "@/Event.json";
+import contract from "@/abis/Event.json";
 
 type State = {
   pageIndex: number;
 };
 
 const events: {
-  src: string;
   tokenUrl: string;
   address: `0x${string}`;
 }[] = [
   {
-    src: "https://eventsea-web-git-frameworks-hackathon-infura-web.vercel.app/_next/image?url=%2Fimages%2Fdefault.png&w=3840&q=75",
     address: "0x6BF3418f943F4c41163dF3027B6C8C59DFE88A9b",
     tokenUrl: getTokenUrl({
       address: "0x99de131ff1223c4f47316c0bb50e42f356dafdaa",
       chain: lineaTestnet,
-      tokenId: "2",
     }),
   },
   {
-    src: "https://remote-image.decentralized-content.com/image?url=https%3A%2F%2Fipfs.decentralized-content.com%2Fipfs%2Fbafybeiegrnialwu66u3nwzkn4gik4i2x2h4ip7y3w2dlymzlpxb5lrqbom&w=1920&q=75",
     address: "0x737fCb6e134b6ACff853B0bE682611A86EE45487",
     tokenUrl: getTokenUrl({
       address: "0x060f3edd18c47f59bd23d063bbeb9aa4a8fec6df",
       chain: lineaTestnet,
-      tokenId: "1",
     }),
   },
   {
-    src: "https://remote-image.decentralized-content.com/image?url=https%3A%2F%2Fipfs.decentralized-content.com%2Fipfs%2Fbafybeidc6e5t3qmyckqh4fr2ewrov5asmeuv4djycopvo3ro366nd3bfpu&w=1920&q=75",
-    address: "0x6BF3418f943F4c41163dF3027B6C8C59DFE88A9b",
+    address: "0xdf7b9CE3E6A0F1acDb215CB077bb9a7894AA5Ef6",
     tokenUrl: getTokenUrl({
       address: "0x8f5ed2503b71e8492badd21d5aaef75d65ac0042",
       chain: lineaTestnet,
-      tokenId: "3",
     }),
   },
 ];
@@ -62,11 +55,11 @@ const reducer: FrameReducer<State> = (state, action) => {
 };
 
 const getContractData = async (
-  eventAddress: `0x${string}`,
+  address: `0x${string}`,
   functionName: string
 ) => {
   return await client.readContract({
-    address: eventAddress,
+    address: address,
     abi: contract.abi,
     functionName,
   });
@@ -77,20 +70,25 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   const previousFrame = getPreviousFrame<State>(searchParams);
   const [state] = useFramesReducer<State>(reducer, initialState, previousFrame);
 
+  const nftContract = (await getContractData(
+    events[state.pageIndex].address,
+    "ticketNFT"
+  )) as string;
+
   // then, when done, return next frame
   return (
     <div>
       <FrameContainer
-        pathname="/examples/mint-button"
-        postUrl="/examples/mint-button/frames"
+        pathname="/"
+        postUrl="/api/frames"
         state={state}
         previousFrame={previousFrame}
       >
-        <FrameImage src={events[state.pageIndex]!.src} aspectRatio="1:1">
+        <FrameImage>
           <h1>
             {
               (await getContractData(
-                events[state.pageIndex]!.address,
+                events[state.pageIndex].address,
                 "title"
               )) as string
             }
@@ -98,7 +96,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
           <p>
             {
               (await getContractData(
-                events[state.pageIndex]!.address,
+                events[state.pageIndex].address,
                 "description"
               )) as string
             }
@@ -106,8 +104,8 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         </FrameImage>
         <FrameButton>←</FrameButton>
         <FrameButton>→</FrameButton>
-        <FrameButton action="post" target="/api/mint">
-          Mint
+        <FrameButton action="link" target={`/mint?&ticket=${nftContract}`}>
+          Get Ticket
         </FrameButton>
       </FrameContainer>
     </div>

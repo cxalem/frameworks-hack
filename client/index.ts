@@ -8,4 +8,4 @@ export const client = createPublicClient({
 
 export const getBlockNumber = async () => {
   return await client.getBlockNumber();
-}
+};

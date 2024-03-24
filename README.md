@@ -1,6 +1,6 @@
 ## TicketCast
 
-TicketCast is an innovative blockchain-based event ticketing framew designed to simplify and secure the process of creating events and purchasing tickets.
+TicketCast is an innovative blockchain-based event ticketing frame designed to simplify and secure the process of creating events and purchasing tickets.
 
 # Features of this Frame
 

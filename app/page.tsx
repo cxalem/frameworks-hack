@@ -1,4 +1,4 @@
-import { client } from "@/client";
+import { client } from "@/client/viem.client";
 import { getTokenUrl } from "frames.js";
 import {
   FrameButton,
@@ -17,29 +17,16 @@ type State = {
 };
 
 const events: {
-  tokenUrl: string;
   address: `0x${string}`;
 }[] = [
   {
     address: "0x6BF3418f943F4c41163dF3027B6C8C59DFE88A9b",
-    tokenUrl: getTokenUrl({
-      address: "0x99de131ff1223c4f47316c0bb50e42f356dafdaa",
-      chain: lineaTestnet,
-    }),
   },
   {
     address: "0x737fCb6e134b6ACff853B0bE682611A86EE45487",
-    tokenUrl: getTokenUrl({
-      address: "0x060f3edd18c47f59bd23d063bbeb9aa4a8fec6df",
-      chain: lineaTestnet,
-    }),
   },
   {
     address: "0xdf7b9CE3E6A0F1acDb215CB077bb9a7894AA5Ef6",
-    tokenUrl: getTokenUrl({
-      address: "0x8f5ed2503b71e8492badd21d5aaef75d65ac0042",
-      chain: lineaTestnet,
-    }),
   },
 ];
 const initialState: State = { pageIndex: 0 };
@@ -104,7 +91,12 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         </FrameImage>
         <FrameButton>←</FrameButton>
         <FrameButton>→</FrameButton>
-        <FrameButton action="link" target={`/mint?&ticket=${nftContract}`}>
+        <FrameButton
+          action="link"
+          target={`/mint?&ticket=${nftContract}&event=${
+            events[state.pageIndex].address
+          }`}
+        >
           Get Ticket
         </FrameButton>
       </FrameContainer>

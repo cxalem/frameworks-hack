@@ -1,5 +1,4 @@
 import { client } from "@/client/viem.client";
-import { getTokenUrl } from "frames.js";
 import {
   FrameButton,
   FrameContainer,
@@ -9,7 +8,6 @@ import {
   getPreviousFrame,
   useFramesReducer,
 } from "frames.js/next/server";
-import { lineaTestnet } from "viem/chains";
 import contract from "@/abis/Event.json";
 
 type State = {
@@ -57,14 +55,10 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   const previousFrame = getPreviousFrame<State>(searchParams);
   const [state] = useFramesReducer<State>(reducer, initialState, previousFrame);
 
-  const nftContract = (await getContractData(
-    events[state.pageIndex].address,
-    "ticketNFT"
-  )) as string;
-
   // then, when done, return next frame
   return (
-    <div>
+    <div className="min-h-screen text-center text-2xl font-semibold mt-20">
+      <h1>TicketCast</h1>
       <FrameContainer
         pathname="/"
         postUrl="/api/frames"
@@ -93,11 +87,11 @@ export default async function Home({ searchParams }: NextServerPageProps) {
         <FrameButton>→</FrameButton>
         <FrameButton
           action="link"
-          target={`/mint?&ticket=${nftContract}&event=${
+          target={`https://eventsea-web.vercel.app/events/${
             events[state.pageIndex].address
           }`}
         >
-          Get Ticket
+          Get Tickets
         </FrameButton>
       </FrameContainer>
     </div>

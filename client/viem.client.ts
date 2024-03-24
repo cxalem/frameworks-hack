@@ -5,6 +5,7 @@ export const walletClient =
   typeof window != "undefined" &&
   createWalletClient({
     chain: lineaTestnet,
+    // @ts-ignore
     transport: custom(window.ethereum),
   });
 

@@ -9,7 +9,7 @@ TicketCast is an innovative blockchain-based event ticketing framew designed to 
 
 **Work In Progress:**
 
-- Creating eevnt from the frame itself
+- Creating event from the frame itself
 - and minting the tickets right into the frame
 
 ## Tech Stacks:

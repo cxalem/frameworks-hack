@@ -1,11 +1,12 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { WagmiProvider, useAccount, useConnect, useDisconnect } from "wagmi";
 
-import { client } from "@/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import contract from "@/abis/Ticket.json";
+import { client } from "@/client";
+import Provider from "@/providers/WagmiProvider";
 
 // ConnectWalletButton component
 const ConnectWalletButton = () => {
@@ -23,12 +24,14 @@ const ConnectWalletButton = () => {
   };
 
   return (
-    <button
-      onClick={handleConnect}
-      className="bg-gray-800 text-white font-medium py-2 px-4 rounded hover:bg-gray-700 duration-200"
-    >
-      {isConnected ? "Disconnect" : "Connect Wallet"}
-    </button>
+    <Provider>
+      <button
+        onClick={handleConnect}
+        className="bg-gray-800 text-white font-medium py-2 px-4 rounded hover:bg-gray-700 duration-200"
+      >
+        {isConnected ? "Disconnect" : "Connect Wallet"}
+      </button>
+    </Provider>
   );
 };
 
